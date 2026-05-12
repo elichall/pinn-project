@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/elichall/Projects/pinn_project/build/src_cpp",
+  "command": "/usr/sbin/c++  -I/home/elichall/Projects/pinn_project/src_cpp/include -I/home/elichall/Projects/pinn_project/src_cpp/plant -I/home/elichall/Projects/pinn_project/vendor/eigen -std=c++17 -o CMakeFiles/RoboticSim.dir/main.cpp.o -c /home/elichall/Projects/pinn_project/src_cpp/main.cpp",
+  "file": "/home/elichall/Projects/pinn_project/src_cpp/main.cpp",
+  "output": "src_cpp/CMakeFiles/RoboticSim.dir/main.cpp.o"
+}
+]

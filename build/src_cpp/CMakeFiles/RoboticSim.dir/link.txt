@@ -1,0 +1,1 @@
+/usr/sbin/c++ -Wl,--dependency-file=CMakeFiles/RoboticSim.dir/link.d CMakeFiles/RoboticSim.dir/main.cpp.o -o RoboticSim  -lpthread -lrt

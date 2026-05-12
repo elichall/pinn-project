@@ -1,0 +1,5 @@
+/home/elichall/Projects/pinn_project/build/CMakeFiles/edit_cache.dir
+/home/elichall/Projects/pinn_project/build/CMakeFiles/rebuild_cache.dir
+/home/elichall/Projects/pinn_project/build/src_cpp/CMakeFiles/RoboticSim.dir
+/home/elichall/Projects/pinn_project/build/src_cpp/CMakeFiles/edit_cache.dir
+/home/elichall/Projects/pinn_project/build/src_cpp/CMakeFiles/rebuild_cache.dir

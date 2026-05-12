@@ -12,13 +12,13 @@ add_executable(RoboticSim ${SOURCES})
 
 # 3. Tell the compiler where your header files (.h) live.
 # "PRIVATE" means these headers are only used by RoboticSim, not shared with other targets.
-target_include_directories(RoboticSim PRIVATE include)
+target_include_directories(RoboticSim PRIVATE include plant)
 # Tell RoboticSim it is allowed to read files from the vendored eigen folder
-target_include_directories(RoboticSim PRIVATE ${CMAKE_SOURCE_DIR}/third_party/eigen)
+target_include_directories(RoboticSim PRIVATE ${CMAKE_SOURCE_DIR}/vendor/eigen)
 
 # 4. Link the necessary libraries to your executable.
-target_link_libraries(RoboticSim 
-    PRIVATE 
+target_link_libraries(RoboticSim
+    PRIVATE
     Boost::boost   # Links the Boost headers for Boost.Interprocess
     pthread        # POSIX Threading: Required by Boost under the hood
     rt             # POSIX Real-Time: Absolutely required for Linux shared memory (shm_open)
