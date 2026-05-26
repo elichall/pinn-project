@@ -38,7 +38,7 @@ int main() {
 
   // get this time's desiredState
   desiredPosition = path.getDesiredPosition(cycleTime);
-  desiredState = model.invKinematics(desiredPosition);
+  desiredState = model.invKinematics(desiredPosition, samplingTime);
 
   // compute control effort
   Eigen::VectorXd tau =

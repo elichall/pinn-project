@@ -26,3 +26,6 @@ AGENTS.md
 
 # cpp libraries
 ventor/
+
+# build folder
+build/
