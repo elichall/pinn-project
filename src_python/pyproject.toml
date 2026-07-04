@@ -17,6 +17,7 @@ matplotlib = "*"
 pandas = "*"
 # The core computational engine (Modernized for Python 3.14)
 jax = ">=0.10.0"
+flax = "*"
 
 # --- THE HEAVY COMPUTE ISOLATION ---
 [tool.poetry.group.cuda.dependencies]
