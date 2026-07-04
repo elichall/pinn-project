@@ -86,13 +86,16 @@ PathIPC *initPathIPC() {
 }
 
 void writeTelemetry(TelemetryIPC *ipc, const double *q, const double *qdot,
+                    const double *u, const double estimatedMass,
                     const double *tau) {
   // on odd python and graphics won't grab data
   // if squenceCounter is different after fetching, they discard
   ipc->sequenceCounter.fetch_add(1, std::memory_order_release);
+  ipc->estimatedMass = estimatedMass;
   for (int i = 0; i < 3; ++i) {
     ipc->q[i] = q[i];
     ipc->qdot[i] = qdot[i];
+    ipc->u[i] = u[i];
     ipc->tauPINN[i] = tau[i];
   } // increment to even so other programs know they can read
   ipc->sequenceCounter.fetch_add(1, std::memory_order_release);

@@ -1,3 +1,5 @@
+#include "ComputedTorqueControl.h"
+
 namespace Controller {
 
 template <int DOF>
@@ -18,11 +20,19 @@ CTC<DOF>::computeControl(const Controller::RobotState<DOF> &state,
   Eigen::Matrix<double, DOF, DOF> M = robotModel.M;
   Eigen::Matrix<double, DOF, 1> C = robotModel.C;
   Eigen::Matrix<double, DOF, 1> G = robotModel.G;
+  
+  u = dState.dqddot - Kd * edot - Kp * e;
 
   Eigen::Matrix<double, DOF, 1> tau =
-      M * (dState.dqddot - Kd * edot - Kp * e) + C + G;
+      M * u + C + G;
 
   return tau;
 };
+
+template <int DOF>
+Eigen::Matrix<double, DOF, 1>
+CTC<DOF>::getCommandedAcc() const {
+  return u;
+}
 
 } // namespace Controller

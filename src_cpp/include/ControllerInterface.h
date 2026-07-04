@@ -26,6 +26,7 @@ public:
   virtual Eigen::Matrix<double, DOF, 1>
   computeControl(const RobotState<DOF> &currentState,
                  const DesiredState<DOF> &refState, const double dt) = 0;
+  virtual Eigen::Matrix<double, DOF, 1> getCommandedAcc() const = 0;
 };
 
 } // namespace Controller

@@ -21,6 +21,7 @@
 // constants
 const double samplingTime = 0.001;
 const int DOF = 3;
+double objectMass = 10.0; // temp explicity definition
 
 // data logging thread
 // 16384 slots = ~16 seconds of buffer at 1000Hz.
@@ -38,6 +39,8 @@ int main() {
   Controller::Torque<DOF> torque;
 
   int mode = 0; // pick up or drop off
+  double estimatedObjectMass =
+      0.0; // controller's belief (0 or AVERAGE_OBJECT_MASS)
 
   LoggingData<DOF> loggingData;
 
@@ -100,13 +103,16 @@ int main() {
     wakeJitter = (actualWakeTime.tv_sec - nextWakeTime.tv_sec) * 1000000000L +
                  (actualWakeTime.tv_nsec - nextWakeTime.tv_nsec);
 
-    // --- Phyics and Control ---
-    // update the model's values
-    model.update();
-
     // physics time keeping
     systemTime += samplingTime;
     cycleTime += samplingTime;
+
+    // --- Phyics and Control ---
+    // read response from sensors
+    sensors.readSensors();
+    state = sensors.qEst;
+    // update the model's values
+    model.update();
 
     // get this time's desiredState
     desiredPosition = path.getDesiredPosition(cycleTime);
@@ -116,32 +122,34 @@ int main() {
     torque.tau =
         activeController->computeControl(state, desiredState, samplingTime);
 
+    // for pinn interferance
+    Eigen::Matrix<double, DOF, 1> commandedAcc =
+        activeController->getCommandedAcc();
+
     // system response (theoretical)
     plant.applyControl(torque.tau, samplingTime);
-
-    // read response from sensors
-    sensors.readSensors();
-    state = sensors.qEst;
 
     // check if cycle is complete
     if (cycleTime >= CYCLE_TIME + WAIT_TIME) {
       // change mode of operation
-      double objectMass = 10.0; // temp explicity definition
       std::swap(cycleStart, cycleEnd);
 
       switch (mode) {
       case 0:
         mode = 1;
+        estimatedObjectMass = AVERAGE_OBJECT_MASS;
         // plant picks up or drops an object, changing end effector mass
         plant.pickPlaceObject(
-            mode, objectMass); // need to pass in the randomly generated mass
-        // model changes its end effector mass to the average of the waste
-        // "class"
+            mode,
+            objectMass); // need to pass in the randomly generated mass
+        // model changes its end effector mass to the average of the
+        // waste "class"
         model.setMode(mode);
         break;
 
       case 1:
         mode = 0;
+        estimatedObjectMass = 0.0;
         plant.pickPlaceObject(mode);
         model.setMode(mode);
 
@@ -161,9 +169,11 @@ int main() {
     // record time for physics/control to complete
     executionTime = (endMathTime.tv_sec - actualWakeTime.tv_sec) * 1000000000L +
                     (endMathTime.tv_nsec - actualWakeTime.tv_nsec);
+    // --- End of Physics ---
 
     // --- Write Telemetry ---
     IPC::writeTelemetry(telemetryIPC, state.q.data(), state.qdot.data(),
+                        commandedAcc.data(), estimatedObjectMass,
                         torque.tau.data());
 
     // --- Data Logging ---
@@ -172,8 +182,12 @@ int main() {
     loggingData.wakeJitter = wakeJitter;
     loggingData.executionTime = executionTime;
     loggingData.q = state;
+    loggingData.qddot = plant.qddot;
+    loggingData.u = commandedAcc;
     loggingData.qDes = desiredState;
     loggingData.tau = torque;
+    loggingData.objectMass = plant.currentObjectMass;
+    loggingData.objectMassEst = estimatedObjectMass;
 
     // push data instance to queue
     telemetryQueue.push(loggingData);

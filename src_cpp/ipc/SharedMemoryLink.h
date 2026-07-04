@@ -24,6 +24,8 @@ public:
 
   double q[3];
   double qdot[3];
+  double u[3]; // commanded acceleration from CTC
+  double estimatedMass;
   double tauPINN[3];
 
   // The control loop increments this when a new path is generated to tell the
@@ -58,6 +60,7 @@ PathIPC *initPathIPC();
 
 // --- Memory Write Methods ---
 void writeTelemetry(TelemetryIPC *ipc, const double *q, const double *qdot,
+                    const double *u, const double estimatedMass,
                     const double *tau);
 void writePath(const double *pathX, const double *pathY, const double *pathZ,
                int numPoints, PathIPC *pathIPC, TelemetryIPC *telemetryIPC);
