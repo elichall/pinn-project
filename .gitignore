@@ -17,7 +17,10 @@ __pycache__/
 
 # Agent files
 .cache/
-.agent/
+.agents/
+
+# Prompts (LLM context files)
+.prompts/
 reference_code/
 AGENTS.md
 TODO.md
@@ -42,3 +45,6 @@ literature.md
 
 # School Project Files
 PROJECT-2026.pdf
+
+# python lsp setup
+pyrightconfig.json

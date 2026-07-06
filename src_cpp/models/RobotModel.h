@@ -26,13 +26,20 @@ public:
   Eigen::Matrix<double, 2, 3> J;
   Eigen::Matrix<double, 2, 3> Jdot;
 
+  // side-effects from invKinematics (set every tick)
+  bool prismaticLimitActive;
+  double manipulability;
+
   // public methods
+  bool isHoldingObject() const { return opMode == 1; }
   void update(); // update the models values
 
   void setMode(int mode);
 
   Controller::DesiredState<3> invKinematics(Path::DesiredPosition dpos,
                                             double dt);
+
+  Eigen::Vector3d forwardKinematics(Eigen::Vector3d q);
 
 private:
   // flags
@@ -65,7 +72,6 @@ private:
   void calcJacobian(const Eigen::Vector3d &q_in, const Eigen::Vector3d &qdot_in,
                     Eigen::Matrix<double, 2, 3> &J_out,
                     Eigen::Matrix<double, 2, 3> &Jdot_out);
-  Eigen::Vector3d forwardKinematics(Eigen::Vector3d q);
 
   void trig();
 };
