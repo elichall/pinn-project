@@ -22,7 +22,7 @@ template <int DOF> class ControllerInterface {
 public:
   // default deconstructor
   virtual ~ControllerInterface() = default;
-  // enforce any controller type to have a function which follows this templet
+  // enforce any controller type to have a function which follows this template
   virtual Eigen::Matrix<double, DOF, 1>
   computeControl(const RobotState<DOF> &currentState,
                  const DesiredState<DOF> &refState, const double dt) = 0;
