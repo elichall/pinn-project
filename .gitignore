@@ -54,6 +54,7 @@ src_cpp/graphics/GraphicsEngine.*
 
 # literature files
 literature.md
+containerization.md
 
 # School Project Files
 PROJECT-2026.pdf
