@@ -97,9 +97,28 @@ Although the PINN inherently learns to infer the true object mass from the resid
 
 ## Build and Run
 
+### Development Setup (Nix + uv)
+
+1. Enter the Nix development shell (provides C++ toolchain, uv, and linker bridge):
+   ```bash
+   nix develop
+   ```
+
+2. Install Python dependencies:
+   ```bash
+   cd src_python
+   uv sync              # CPU-only
+   uv sync --extra cuda # with CUDA 12 support
+   ```
+
+3. Verify the stack:
+   ```bash
+   uv run python test_stack.py
+   ```
+
 ### Dependencies
 - **C++:** CMake (≥3.10), GCC (C++17), Eigen3, Boost, GLFW, OpenGL (GLAD/GLM vendored).
-- **Python:** Poetry, JAX, Flax, Optax, NumPy, Pandas, Matplotlib.
+- **Python:** uv, JAX, Flax, Optax, NumPy, Pandas, Matplotlib.
 - **OS:** Linux (POSIX shared memory, `clock_nanosleep`, `SCHED_FIFO`).
 
 ### Compilation
@@ -120,18 +139,18 @@ sudo ./build/RoboticSim
 ./build/GraphicsApp
 
 # Terminal 3: Python Inference (optional — currently reads shared memory)
-cd src_python && poetry run python inference/shared_memory_node.py
+cd src_python && uv run python inference/shared_memory_node.py
 ```
 
 ### Post-Simulation Analysis
 ```bash
-cd src_python && poetry run python analysis/plot_telemetry.py
+cd src_python && uv run python analysis/plot_telemetry.py
 ```
 Generates tracking-error histograms, control-effort bar charts, and real-time timing diagnostics in `logs/`.
 
 ### PINN Training
 ```bash
-cd src_python && poetry run python models/physics_loss.py
+cd src_python && uv run python models/physics_loss.py
 ```
 Validates the loss computation and gradient flow. Full training pipeline uses `src_python/training/train.py` (WIP).
 
@@ -170,7 +189,8 @@ pinn_project/
 │       ├── EndPointGenerator.h             # Random endpoint generator
 │       └── helpers.h                       # Real-time priority + path sampling
 ├── src_python/
-│   ├── pyproject.toml                      # Poetry: JAX, Flax, Optax, etc.
+│   ├── pyproject.toml                      # uv: JAX, Flax, Optax, etc.
+│   ├── uv.lock                             # Locked dependency versions
 │   ├── models/
 │   │   ├── pinn_network.py                 # 4-layer Flax PINN (10→128→64→32→4)
 │   │   ├── kinematics.py                   # JAX dynamics: get_M, get_C, get_G

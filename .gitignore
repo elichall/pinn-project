@@ -2,6 +2,17 @@
 venv/
 env/
 .env/
+.venv/
+
+# Python packaging
+*.egg-info/
+dist/
+__pypackages__/
+.python-version
+
+# OS
+.DS_Store
+Thumbs.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -34,8 +45,9 @@ logs/
 # cpp libraries
 vendor/
 
-# build folder
+# build folder/make files
 build/
+compile_commands.json
 
 # graphics engine
 src_cpp/graphics/GraphicsEngine.*
