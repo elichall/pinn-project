@@ -1,1 +1,0 @@
-/home/elichall/Documents/ME/vault/projects/pinn-project/containerization.md
