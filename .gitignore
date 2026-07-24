@@ -1,6 +1,7 @@
 # Nix
 result/
 .envrc
+.direnv
 
 # Virtual Environments
 venv/
