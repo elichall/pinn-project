@@ -1,3 +1,7 @@
+# Nix
+result/
+.envrc
+
 # Virtual Environments
 venv/
 env/
